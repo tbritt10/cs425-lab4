@@ -108,7 +108,10 @@ public class Rates {
             JSONObject json = new JSONObject();
             JSONObject rates = new JSONObject();            
             
-            String tempDate = "9/20/2019"; 
+            json.put("rates", rates);
+            json.put("base", json);
+            json.put("date", json);
+            
             /* 
              * Add rate data to "rates" container and add "date" and "base"
              * values to "json" container.  See the "getRatesAsTable()" method
@@ -120,12 +123,17 @@ public class Rates {
             while (iterator.hasNext()) {
                 
                 row = iterator.next();
-                json.put("rates", rates);
+                rates = new JSONObject();
+                for (int i = 0; i < row.length; ++i) {
+                    rates.put(row, );
+                }
+          
+                
             
             
             }
             /* Parse top-level container to a JSON string */
-            
+            System.err.println(rates);
             results = JSONValue.toJSONString(json);
             
         }

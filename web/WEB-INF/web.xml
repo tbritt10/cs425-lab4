@@ -6,7 +6,7 @@
     </servlet>
     <servlet>
         <servlet-name>JSONServlet</servlet-name>
-        <servlet-class>edu.jsu.mcis.cs425.Lab4.JSONServlet</servlet-class>
+        <servlet-class>edu.jsu.mcis.cs425.Lab4.Latest</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Test</servlet-name>
