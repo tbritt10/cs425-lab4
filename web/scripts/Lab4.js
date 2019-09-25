@@ -18,12 +18,15 @@ var Lab4 = ( function() {
 
             // INSERT YOUR CODE HERE
             var userIn = $("#input").val().trim();
-            
+            const JSONRates = Object.entries(rates);
+            let results = [];
+            for (let i = 0; i < JSONRates.length; i++) {
+                results.push(userIn * JSONRates[i+1]);
+            }
 
         },
         
         getConversion: function() {
-            
             /*
              * This method should send an Ajax request to our API to get the
              * latest exchange rates.  Use "latest" as the URL and "json" as the
