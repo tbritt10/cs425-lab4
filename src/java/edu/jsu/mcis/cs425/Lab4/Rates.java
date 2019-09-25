@@ -107,11 +107,7 @@ public class Rates {
             
             JSONObject json = new JSONObject();
             JSONObject rates = new JSONObject();            
-            
-            json.put("rates", rates);
-            json.put("base", json);
-            json.put("date", json);
-            
+            int counter = 0;
             /* 
              * Add rate data to "rates" container and add "date" and "base"
              * values to "json" container.  See the "getRatesAsTable()" method
@@ -120,20 +116,34 @@ public class Rates {
              * JSON format: "Key": Value
              * *** INSERT YOUR CODE HERE ***
              */
+            
             while (iterator.hasNext()) {
                 
-                row = iterator.next();
-                rates = new JSONObject();
-                for (int i = 0; i < row.length; ++i) {
-                    rates.put(row, );
+                if (counter == 0) {
+                    counter++;
+                    row = iterator.next();
+                    //Skip line is intentional
+                    row = iterator.next();
+                    rates.put(row[1], row[2]);
+                }
+                else {
+                    row = iterator.next();
+                    counter++;
+                    for (int i = 0; i < row.length; ++i) {
+                        rates.put(row[1], row[2]);
+                    }
                 }
           
                 
             
             
-            }
+                }
+            
             /* Parse top-level container to a JSON string */
-            System.err.println(rates);
+            json.put("base", "USD");
+            json.put("date", "9-25-2019");
+            json.put("rates", rates);
+            //results = JSONValue.toJSONString(json);
             results = JSONValue.toJSONString(json);
             
         }
