@@ -96,6 +96,7 @@ public class Rates {
         
         String results = "";
         String[] row;
+        double r;
         
         try {
             
@@ -124,13 +125,15 @@ public class Rates {
                     row = iterator.next();
                     //Skip line is intentional
                     row = iterator.next();
-                    rates.put(row[1], row[2]);
+                    r = Double.parseDouble(row[2]);
+                    rates.put(row[1], r);
                 }
                 else {
                     row = iterator.next();
                     counter++;
                     for (int i = 0; i < row.length; ++i) {
-                        rates.put(row[1], row[2]);
+                        r = Double.parseDouble(row[2]);
+                        rates.put(row[1], r);
                     }
                 }
           
