@@ -17,13 +17,17 @@ var Lab4 = ( function() {
              */
 
             // INSERT YOUR CODE HERE
-            var userIn = $("#input").val().trim();
-            const JSONRates = Object.entries(rates);
-            let results = [];
-            for (let i = 0; i < JSONRates.length; i++) {
-                results.push(userIn * JSONRates[i+1]);
+            
+            var output = "<p>";
+            let userIn = parseInt($("#input").val().trim());
+            var rateList = rates["rates"];
+            for (var key in rateList) {
+                output += (key + ": ");
+                output += (userIn * rateList[key]).toFixed(2);
+                output += "<br />";
             }
-
+            output += "</p>";
+            $("#output").html(output);
         },
         
         getConversion: function() {
