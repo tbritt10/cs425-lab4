@@ -13,6 +13,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.naming.NamingException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,14 +35,13 @@ public class Latest extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NamingException, SQLException {
         
         response.setContentType("text/json;charset=UTF-8");
-        String path = getServletContext().getRealPath(File.separator + Rates.RATE_FILENAME);
-        
+        //String path = getServletContext().getRealPath(File.separator + Rates.RATE_FILENAME);
         try (PrintWriter out = response.getWriter()) {
-            out.println(Rates.getRatesAsJson(Rates.getRates(path)));
-        }
+            out.println(Rates.getRatesAsJson( request.getParameter("code")) );
+        } catch (Exception e) {}
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -53,7 +56,10 @@ public class Latest extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try{
         processRequest(request, response);
+        }
+        catch (NamingException | SQLException ex) {}
     }
 
     /**
@@ -67,8 +73,12 @@ public class Latest extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {            
         processRequest(request, response);
+        }
+        catch (NamingException | SQLException ex) {}
     }
+        
 
     /**
      * Returns a short description of the servlet.

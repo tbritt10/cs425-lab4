@@ -8,10 +8,20 @@ import java.util.Iterator;
 import java.util.List;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import java.sql.*;
+import javax.sql.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletException;
 
 public class Rates {
     
+    
     public static final String RATE_FILENAME = "rates.csv";
+    public static Context envContext = null, initContext = null;
+    public static DataSource ds = null;
+    public static Connection conn = null;
     
     public static List<String[]> getRates(String path) {
         
@@ -157,5 +167,77 @@ public class Rates {
         return (results.trim());
         
     }
+    public static String getRatesAsJson(String code) {
+        String results = "";
+        String codes = "";
+        String rate = "";
+        String date = "";
+        JSONObject json = new JSONObject();
+        JSONObject rates = new JSONObject();
+        String query = "";
+        
+        
+        try{
+            //Aquire Connection
+            envContext = new InitialContext();
+            initContext  = (Context)envContext.lookup("java:/comp/env");
+            ds = (DataSource)initContext.lookup("jdbc/db_pool");
+            conn = ds.getConnection();
+        
+        
+            if(code == null){
+                query = "SELECT * FROM rates";
+            }
+            else {
+                query = "SELECT * FROM rates WHERE code = ?";
+            }
+
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            if (code != null)
+                statement.setString(1, code);
+
+            boolean hasresults = statement.execute();
+
+            if (hasresults) {
+                ResultSet resultset = statement.getResultSet();
+                while (resultset.next()) {
+                    System.err.println("Next row ...");
+                    codes = resultset.getString("code");
+                    rate = resultset.getString("rate");
+                    date = resultset.getString("date");
+                    rates.put(codes, rate);
+                }
+
+            json.put("rates", rates);
+            json.put("date",date);
+            json.put("base","USD");
+            }
+            results = JSONValue.toJSONString(json);
+            closeConnection();
+        }
+        
+        
+        catch(Exception e){ e.printStackTrace(); }
+        
+        return (results.trim());
+    }
+    
+    public Connection getConnection() { return conn; }
+    
+    public static void closeConnection() {
+        
+        if (conn != null) {
+            
+            try {
+                conn.close();
+            }
+            
+            catch (SQLException e) {}
+            
+        }
+    
+    } // End closeConnection()
+   
 
 }
